@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import { PrismaClient } from "@prisma/client";
 import Image from "next/image";
 import {
@@ -22,17 +21,12 @@ import {
   tech,
   zoolozy,
 } from "@/public/images/index";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 const prisma = new PrismaClient();
 
 export default async function Home() {
-  const quizzes = await prisma.quiz.findMany({
-    select: {
-      id: true,
-      categoryId: true,
-    },
-  });
-
   const categories = await prisma.category.findMany({
     select: {
       id: true,
@@ -81,6 +75,10 @@ export default async function Home() {
     { id: 17, name: "Technology", image: categoryImages.tech },
     { id: 18, name: "Zoology", image: categoryImages.zoolozy },
   ];
+  const handleOnClick = (categoryId: number) => {
+    const router = useRouter();
+    router.push(`/quiz/${categoryId}`);
+  };
 
   return (
     <section className=" p-2">
@@ -88,12 +86,12 @@ export default async function Home() {
         <h1 className="text-2xl font-semibold">All Quizzes</h1>
         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((category) => {
-            const categoryQuizzes = quizzes.filter(
-              (quiz) => quiz.categoryId === category.id
-            );
-
             return (
-              <li key={category.id} className="flex flex-col items-center">
+              <Link
+                key={category.id}
+                href={`/quiz/${category.id}`}
+                className="flex flex-col items-center hover:scale-105 transition-transform duration-300"
+              >
                 <Image
                   src={
                     categoryImagesMapped.find(
@@ -101,24 +99,10 @@ export default async function Home() {
                     )?.image || "/fallback-image.png"
                   }
                   alt={category.name}
-                  className="rounded-lg w-80 h-60 object-cover hover:scale-105 transition-transform duration-300"
+                  className="rounded-lg w-80 h-60 object-cover "
                 />
-                <h2 className="text-lg font-semibold mt-2">{category.name}</h2>
-                {categoryQuizzes.length > 0 && (
-                  <ul className="mt-2">
-                    {categoryQuizzes.map((quiz) => (
-                      <li key={quiz.id}>
-                        <Link
-                          href={`/quiz/${quiz.id}`}
-                          className="text-blue-500 hover:underline"
-                        >
-                          Quiz #{quiz.id}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
+                <h2 className="text mt-2">{category.name}</h2>
+              </Link>
             );
           })}
         </ul>
