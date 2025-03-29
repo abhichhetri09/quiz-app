@@ -6,6 +6,11 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL") // Use SQLite for simplicity
 }
+model Category {
+  id       Int     @id @default(autoincrement())
+  name     String
+  quizzes  Quiz[]  @relation("CategoryQuizzes")
+}
 
 model Quiz {
   id        Int        @id @default(autoincrement())
@@ -13,7 +18,8 @@ model Quiz {
   options   String
   answer    String
   questions Question[] @relation("QuizQuestions")
-  category  String?    // Category name for the quiz
+  categoryId Int?     // This is the foreign key
+  category  Category? @relation("CategoryQuizzes", fields: [categoryId], references: [id]) // Relationship to Category
 }
 
 model Question {
