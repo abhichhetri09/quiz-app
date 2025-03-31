@@ -12,7 +12,7 @@ export default async function Home() {
       className="p-2"
       style={{
         background:
-          "linear-gradient(90deg, rgba(9,9,44,1) 0%, rgba(35,44,75,1) 35%, rgba(28,55,61,1) 100%);",
+          "linear-gradient(90deg, rgba(9,9,44,1) 0%, rgba(35,44,75,1) 35%, rgba(28,55,61,1) 100%)",
       }}
     >
       <div className="grid grid-row items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">

@@ -1,10 +1,12 @@
 import { PrismaClient } from "@prisma/client";
+import * as React from "react";
 
 const globalForPrisma = global as unknown as { prisma?: PrismaClient };
 export const prisma = globalForPrisma.prisma ?? new PrismaClient();
 
 export async function GET(
   request: Request,
+
   { params }: { params: { id: string } }
 ) {
   const categoryId = parseInt(params.id); // Convert string to number
